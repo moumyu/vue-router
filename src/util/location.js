@@ -15,6 +15,8 @@ export function normalizeLocation (
 ): Location {
   let next: Location = typeof raw === 'string' ? { path: raw } : raw
   // named target
+  // 如果已经被normalized了直接返回
+  // TODO: 是否只有这个函数返回的normalized
   if (next._normalized) {
     return next
   } else if (next.name) {

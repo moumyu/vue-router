@@ -85,7 +85,7 @@ export class HTML5History extends History {
   }
 }
 
-export function getLocation (base: string): string {
+export function getLocation (base: string): string { // 根据base获取当前路径（去掉base后的路径）
   let path = decodeURI(window.location.pathname)
   if (base && path.toLowerCase().indexOf(base.toLowerCase()) === 0) {
     path = path.slice(base.length)

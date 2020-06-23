@@ -65,5 +65,7 @@ module.exports = {
     }
   },
 
-  plugins: [new VuePlugin()]
+  plugins: [new VuePlugin()],
+
+  devtool: 'source-map'
 }

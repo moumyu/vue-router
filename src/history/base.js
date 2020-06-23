@@ -32,6 +32,7 @@ export class History {
   cleanupListeners: Function
 
   // implemented by sub-classes
+  // TODO 这些加号有什么用？
   +go: (n: number) => void
   +push: (loc: RawLocation) => void
   +replace: (loc: RawLocation) => void
@@ -232,7 +233,7 @@ export class History {
   }
 }
 
-function normalizeBase (base: ?string): string {
+function normalizeBase (base: ?string): string { // 将base标准化
   if (!base) {
     if (inBrowser) {
       // respect <base> tag

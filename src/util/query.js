@@ -34,6 +34,7 @@ export function resolveQuery (
   return parsedQuery
 }
 
+// 解析query参数，返回query对象形式
 function parseQuery (query: string): Dictionary<string> {
   const res = {}
 
@@ -44,6 +45,7 @@ function parseQuery (query: string): Dictionary<string> {
   }
 
   query.split('&').forEach(param => {
+    // TODO：为什么这里要单独把+号给替换掉
     const parts = param.replace(/\+/g, ' ').split('=')
     const key = decode(parts.shift())
     const val = parts.length > 0

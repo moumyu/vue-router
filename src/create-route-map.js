@@ -26,6 +26,7 @@ export function createRouteMap (
   })
 
   // ensure wildcard routes are always at the end
+  // TODO 将通配符路径放到最后，这个意思是在vue-router中，我们可以将routes中的通配符路径定义到前面？
   for (let i = 0, l = pathList.length; i < l; i++) {
     if (pathList[i] === '*') {
       pathList.push(pathList.splice(i, 1)[0])
@@ -74,8 +75,10 @@ function addRouteRecord (
 
   const pathToRegexpOptions: PathToRegexpOptions =
     route.pathToRegexpOptions || {}
+  // 标准化路径，将RouteConfig中path转化为标准路径
   const normalizedPath = normalizePath(path, parent, pathToRegexpOptions.strict)
 
+  // 如果RouteConfig中大小写敏感的话，pathToRegexpOptions中的大小写也敏感
   if (typeof route.caseSensitive === 'boolean') {
     pathToRegexpOptions.sensitive = route.caseSensitive
   }
@@ -175,6 +178,11 @@ function addRouteRecord (
   }
 }
 
+/**
+ * d
+ * @param {*} path
+ * @param {*} pathToRegexpOptions
+ */
 function compileRouteRegex (
   path: string,
   pathToRegexpOptions: PathToRegexpOptions
@@ -193,13 +201,19 @@ function compileRouteRegex (
   return regex
 }
 
+/**
+ * 标准化RouteConfig中的path
+ * @param {*} path 路由匹配路径
+ * @param {*} parent 路由匹配父路径
+ * @param {*} strict pathToRegexpOptions中的strict
+ */
 function normalizePath (
   path: string,
   parent?: RouteRecord,
   strict?: boolean
 ): string {
-  if (!strict) path = path.replace(/\/$/, '')
-  if (path[0] === '/') return path
-  if (parent == null) return path
+  if (!strict) path = path.replace(/\/$/, '') // 由此可以看到strict的意思是：是否精确匹配path末尾斜杠
+  if (path[0] === '/') return path // 如果path是以'/'开头直接返回这个路径
+  if (parent == null) return path // 如果path的parent为null，直接返回这个路径
   return cleanPath(`${parent.path}/${path}`)
 }

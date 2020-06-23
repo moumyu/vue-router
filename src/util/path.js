@@ -42,6 +42,8 @@ export function resolvePath (
   return stack.join('/')
 }
 
+// 解析path，返回path、hash和query
+// 此时的path、hash和query均是字符串
 export function parsePath (path: string): {
   path: string;
   query: string;
@@ -69,6 +71,6 @@ export function parsePath (path: string): {
   }
 }
 
-export function cleanPath (path: string): string {
+export function cleanPath (path: string): string { // 将路径中两个斜杠替换成一个斜杠
   return path.replace(/\/\//g, '/')
 }
