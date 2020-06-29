@@ -15,6 +15,8 @@ const encode = str => encodeURIComponent(str)
 
 const decode = decodeURIComponent
 
+// 使用自定义的parseQuery或者默认parseQuery解析query
+// 并将额外的extraQuery增加到query对象中一并返回
 export function resolveQuery (
   query: ?string,
   extraQuery: Dictionary<string> = {},

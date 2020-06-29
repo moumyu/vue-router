@@ -51,6 +51,7 @@ export function normalizeLocation (
     ? resolvePath(parsedPath.path, basePath, append || next.append)
     : basePath
 
+  // 将query解析成对象的形式
   const query = resolveQuery(
     parsedPath.query,
     next.query,
