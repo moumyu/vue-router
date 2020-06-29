@@ -13,7 +13,7 @@ export class HTML5History extends History {
   constructor (router: Router, base: ?string) {
     super(router, base)
 
-    this._startLocation = getLocation(this.base)
+    this._startLocation = getLocation(this.base) // 当前路径（去掉base）
   }
 
   setupListeners () {

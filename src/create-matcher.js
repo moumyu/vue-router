@@ -28,8 +28,9 @@ export function createMatcher (
     currentRoute?: Route,
     redirectedFrom?: Location
   ): Route {
+    // 将其标准化为{ hash, path, query, _normalized }的形式
     const location = normalizeLocation(raw, currentRoute, false, router)
-    const { name } = location
+    const { name } = location // 当raw中有name时才会有
 
     if (name) {
       const record = nameMap[name]
@@ -170,6 +171,7 @@ export function createMatcher (
   }
 }
 
+// 传入正则表达式和路径及路由参数，返回是否匹配
 function matchRoute (
   regex: RouteRegExp,
   path: string,

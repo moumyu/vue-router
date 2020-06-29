@@ -39,6 +39,7 @@ export default class VueRouter {
     this.beforeHooks = []
     this.resolveHooks = []
     this.afterHooks = []
+    // TODO 返回{ addRoutes, match }，addRoutes为添加路由函数，match暂时不知
     this.matcher = createMatcher(options.routes || [], this)
 
     let mode = options.mode || 'hash'
@@ -47,7 +48,7 @@ export default class VueRouter {
       mode = 'hash'
     }
     if (!inBrowser) {
-      mode = 'abstract'
+      mode = 'abstract' // TODO abstract是什么模式
     }
     this.mode = mode
 

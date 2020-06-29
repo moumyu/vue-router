@@ -5,6 +5,7 @@ import { stringifyQuery } from './query'
 
 const trailingSlashRE = /\/?$/
 
+// 创建一个路由对象route
 export function createRoute (
   record: ?RouteRecord,
   location: Location,
@@ -70,6 +71,7 @@ function getFullPath (
   return (path || '/') + stringify(query) + hash
 }
 
+// 比较两个路由对象是否是同一路径
 export function isSameRoute (a: Route, b: ?Route): boolean {
   if (b === START) {
     return a === b
