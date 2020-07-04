@@ -13,6 +13,7 @@ export function genStateKey (): string {
 
 let _key: string = genStateKey()
 
+// TODO 暂时理解为当需要滚动时返回一个以当前performance的时间的key来记录位置
 export function getStateKey () {
   return _key
 }

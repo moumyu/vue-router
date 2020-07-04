@@ -82,6 +82,7 @@ export function flatMapComponents (
   }))
 }
 
+// 将传入的数组连接返回一个新数组（但是数组里面的对象还是保有引用）
 export function flatten (arr: Array<any>): Array<any> {
   return Array.prototype.concat.apply([], arr)
 }

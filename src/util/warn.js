@@ -12,6 +12,7 @@ export function warn (condition: any, message: string) {
   }
 }
 
+// 是否是error实例
 export function isError (err: any): boolean {
   return Object.prototype.toString.call(err).indexOf('Error') > -1
 }

@@ -78,6 +78,7 @@ export function handleScroll (
   })
 }
 
+// 保存以当前performance.time.now为key的位置
 export function saveScrollPosition () {
   const key = getStateKey()
   if (key) {

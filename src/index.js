@@ -242,6 +242,7 @@ export default class VueRouter {
   }
 }
 
+// 向钩子函数数组里增加钩子函数，并返回一个移除已注册守卫/钩子的函数
 function registerHook (list: Array<any>, fn: Function): Function {
   list.push(fn)
   return () => {
