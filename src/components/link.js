@@ -49,6 +49,8 @@ export default {
     const globalActiveClass = router.options.linkActiveClass
     const globalExactActiveClass = router.options.linkExactActiveClass
     // Support global empty active class
+    // 默认为router-link-active和router-link-exact-active，但构造选项
+    // 的全局的linkActiveClass和linkExactActiveClass会覆盖局部的activeClass和exactActiveClass
     const activeClassFallback =
       globalActiveClass == null ? 'router-link-active' : globalActiveClass
     const exactActiveClassFallback =

@@ -11,6 +11,7 @@ export function install (Vue) {
 
   const isDef = v => v !== undefined
 
+  // TODO 在RouterView中有registerRouteInstance
   const registerInstance = (vm, callVal) => {
     let i = vm.$options._parentVnode
     if (isDef(i) && isDef(i = i.data) && isDef(i = i.registerRouteInstance)) {
@@ -24,7 +25,7 @@ export function install (Vue) {
         this._routerRoot = this
         this._router = this.$options.router
         this._router.init(this)
-        Vue.util.defineReactive(this, '_route', this._router.history.current)
+        Vue.util.defineReactive(this, '_route', this._router.history.current) // TODO 这里有什么用？
       } else {
         this._routerRoot = (this.$parent && this.$parent._routerRoot) || this
       }
@@ -48,5 +49,6 @@ export function install (Vue) {
 
   const strats = Vue.config.optionMergeStrategies
   // use the same hook merging strategy for route hooks
+  // 使用created的合并策略到router组件的三个生命周期函数里面
   strats.beforeRouteEnter = strats.beforeRouteLeave = strats.beforeRouteUpdate = strats.created
 }
