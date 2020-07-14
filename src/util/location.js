@@ -7,19 +7,21 @@ import { fillParams } from './params'
 import { warn } from './warn'
 import { extend } from './misc'
 
+// 将当前raw路径解析，并返回path/query/hash
+// TODO: 这里为什么不返回params
 export function normalizeLocation (
   raw: RawLocation,
   current: ?Route,
   append: ?boolean,
   router: ?VueRouter
 ): Location {
-  let next: Location = typeof raw === 'string' ? { path: raw } : raw
+  let next: Location = typeof raw === 'string' ? { path: raw } : raw // 封装要跳转的路径
   // named target
   // 如果已经被normalized了直接返回
   // TODO: 是否只有这个函数返回的normalized
   if (next._normalized) {
     return next
-  } else if (next.name) {
+  } else if (next.name) { // 如果next.name存在，这个函数基本就返回next对象
     next = extend({}, raw)
     const params = next.params
     if (params && typeof params === 'object') {
@@ -29,6 +31,7 @@ export function normalizeLocation (
   }
 
   // relative params
+  // TODO: 这种情况什么时候会发生
   if (!next.path && next.params && current) {
     next = extend({}, next)
     next._normalized = true
