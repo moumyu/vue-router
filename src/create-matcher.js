@@ -23,6 +23,7 @@ export function createMatcher (
     createRouteMap(routes, pathList, pathMap, nameMap)
   }
 
+  // 返回一个匹配的route对象
   function match (
     raw: RawLocation,
     currentRoute?: Route,
@@ -57,7 +58,7 @@ export function createMatcher (
       location.path = fillParams(record.path, location.params, `named route "${name}"`)
       return _createRoute(record, location, redirectedFrom)
     } else if (location.path) {
-      location.params = {}
+      location.params = {} // TODO: 为什么要把params放到这来，不在normalizeLocation中处理
       for (let i = 0; i < pathList.length; i++) {
         const path = pathList[i]
         const record = pathMap[path]

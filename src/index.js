@@ -201,6 +201,7 @@ export default class VueRouter {
     }))
   }
 
+  // 解析要跳转的路径，返回{ location, route, href, normalizedTo, resolved }
   resolve (
     to: RawLocation,
     current?: Route,
@@ -251,6 +252,7 @@ function registerHook (list: Array<any>, fn: Function): Function {
   }
 }
 
+// 如果是mode是hash则带上#，最后和base拼接成完整的href
 function createHref (base: string, fullPath: string, mode) {
   var path = mode === 'hash' ? '#' + fullPath : fullPath
   return base ? cleanPath(base + '/' + path) : path

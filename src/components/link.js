@@ -164,6 +164,7 @@ export default {
   }
 }
 
+// 守卫点击事件，以下条件不发生路由替换
 function guardEvent (e) {
   // don't redirect with control keys
   if (e.metaKey || e.altKey || e.ctrlKey || e.shiftKey) return
