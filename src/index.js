@@ -24,10 +24,10 @@ export default class VueRouter {
   ready: boolean;
   readyCbs: Array<Function>;
   options: RouterOptions; // 构造VueRouter传进来的option
-  mode: string;
-  history: HashHistory | HTML5History | AbstractHistory;
-  matcher: Matcher;
-  fallback: boolean;
+  mode: string; // 路由模式(hash/abstract/history)
+  history: HashHistory | HTML5History | AbstractHistory; // 路由对象
+  matcher: Matcher; // 一个对象，含有addRoutes和match两个方法
+  fallback: boolean; // 当浏览器不支持history时是否回退到hash模式
   beforeHooks: Array<?NavigationGuard>;
   resolveHooks: Array<?NavigationGuard>;
   afterHooks: Array<?AfterNavigationHook>;
@@ -39,7 +39,8 @@ export default class VueRouter {
     this.beforeHooks = []
     this.resolveHooks = []
     this.afterHooks = []
-    // TODO 返回{ addRoutes, match }，addRoutes为添加路由函数，match暂时不知
+    // 返回{ addRoutes, match }，addRoutes为添加路由函数，match暂时不知
+    // match为根据rawLocation和current返回一个匹配路径route对象
     this.matcher = createMatcher(options.routes || [], this)
 
     let mode = options.mode || 'hash'
@@ -48,7 +49,7 @@ export default class VueRouter {
       mode = 'hash'
     }
     if (!inBrowser) {
-      mode = 'abstract' // TODO abstract是什么模式
+      mode = 'abstract' // TODO abstract是什么模式，abstract是node.js，但是node.js为什么需要router?
     }
     this.mode = mode
 

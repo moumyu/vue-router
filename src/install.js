@@ -26,6 +26,8 @@ export function install (Vue) {
         this._router = this.$options.router
         this._router.init(this)
         Vue.util.defineReactive(this, '_route', this._router.history.current) // TODO 这里有什么用？
+        // 这里为什么不像上面那样通过this._route = current来赋值，而是通过defineReactive
+        // 来定义响应式，以后会有修改_route的情况吗？
       } else {
         this._routerRoot = (this.$parent && this.$parent._routerRoot) || this
       }

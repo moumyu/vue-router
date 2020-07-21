@@ -252,7 +252,7 @@ export class History {
 
 function normalizeBase (base: ?string): string { // 将base标准化
   if (!base) {
-    if (inBrowser) {
+    if (inBrowser) { // base不存在先去base标签里面取
       // respect <base> tag
       const baseEl = document.querySelector('base')
       base = (baseEl && baseEl.getAttribute('href')) || '/'

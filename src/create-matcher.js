@@ -17,6 +17,9 @@ export function createMatcher (
   routes: Array<RouteConfig>,
   router: VueRouter
 ): Matcher {
+  // 这里为什么不需要把这三个变量暴露出去
+  // => 因为对于router来说，只需要match方法来获得匹配的路由即可
+  // 增加时用addRoutes来增加，因为这三个通过闭包形成私有变量
   const { pathList, pathMap, nameMap } = createRouteMap(routes)
 
   function addRoutes (routes) {
@@ -29,6 +32,7 @@ export function createMatcher (
     currentRoute?: Route,
     redirectedFrom?: Location
   ): Route {
+    // TODO: 这里的raw并不等于router-link的to的值？
     // 将其标准化为{ hash, path, query, _normalized }的形式
     const location = normalizeLocation(raw, currentRoute, false, router)
     const { name } = location // 当raw中有name时才会有
@@ -39,7 +43,7 @@ export function createMatcher (
         warn(record, `Route with name '${name}' does not exist`)
       }
       if (!record) return _createRoute(null, location)
-      const paramNames = record.regex.keys
+      const paramNames = record.regex.keys // raw对应的record的参数名称
         .filter(key => !key.optional)
         .map(key => key.name)
 
@@ -47,6 +51,8 @@ export function createMatcher (
         location.params = {}
       }
 
+      // 这个currentRoute应该指的是跳转之前的相对Route，相同层级的路由跳转currentRoute为其父路由
+      // TODO: 这里到底有什么用？
       if (currentRoute && typeof currentRoute.params === 'object') {
         for (const key in currentRoute.params) {
           if (!(key in location.params) && paramNames.indexOf(key) > -1) {
@@ -58,7 +64,8 @@ export function createMatcher (
       location.path = fillParams(record.path, location.params, `named route "${name}"`)
       return _createRoute(record, location, redirectedFrom)
     } else if (location.path) {
-      location.params = {} // TODO: 为什么要把params放到这来，不在normalizeLocation中处理
+      location.params = {} // 为什么要把params放到这来，不在normalizeLocation中处理
+      // => 因为这里normalizeLocation是个外部函数，无法访问pathList、pathMap变量
       for (let i = 0; i < pathList.length; i++) {
         const path = pathList[i]
         const record = pathMap[path]

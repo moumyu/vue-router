@@ -4,6 +4,11 @@ import Regexp from 'path-to-regexp'
 import { cleanPath } from './util/path'
 import { assert, warn } from './util/warn'
 
+// 有两个地方会调用此函数
+// 第一个是初始化的时候只会传入routes
+// 第二个是在router.matcher.addRoutes时，
+// 会将需要加入的routes和以前的pathList、pathMap、nameMap一起传进来
+// @return 整个函数返回新的pathList、pathMap、nameMap
 export function createRouteMap (
   routes: Array<RouteConfig>,
   oldPathList?: Array<string>,
@@ -19,6 +24,7 @@ export function createRouteMap (
   // $flow-disable-line
   const pathMap: Dictionary<RouteRecord> = oldPathMap || Object.create(null)
   // $flow-disable-line
+  // 命名路由的map对象
   const nameMap: Dictionary<RouteRecord> = oldNameMap || Object.create(null)
 
   routes.forEach(route => {
@@ -41,7 +47,7 @@ export function createRouteMap (
     // check for missing leading slash
       .filter(path => path && path.charAt(0) !== '*' && path.charAt(0) !== '/')
 
-    if (found.length > 0) {
+    if (found.length > 0) { // 非嵌套路由前面必须要有斜杠
       const pathNames = found.map(path => `- ${path}`).join('\n')
       warn(false, `Non-nested routes must include a leading slash character. Fix the following routes: \n${pathNames}`)
     }
@@ -54,6 +60,9 @@ export function createRouteMap (
   }
 }
 
+// 增加路由记录
+// 这里的parent和matchAs是什么
+// => parent为父级RouteRecord，matchAs只有当有路由别名时才会产生的
 function addRouteRecord (
   pathList: Array<string>,
   pathMap: Dictionary<RouteRecord>,
@@ -76,6 +85,8 @@ function addRouteRecord (
   const pathToRegexpOptions: PathToRegexpOptions =
     route.pathToRegexpOptions || {}
   // 标准化路径，将RouteConfig中path转化为标准路径
+  // 一般来说标准化过程中会去掉path末尾的斜杠，这里pathToRegexpOptions.strict如果为true，
+  // 则会精确匹配末尾的斜杠
   const normalizedPath = normalizePath(path, parent, pathToRegexpOptions.strict)
 
   // 如果RouteConfig中大小写敏感的话，pathToRegexpOptions中的大小写也敏感
@@ -83,7 +94,7 @@ function addRouteRecord (
     pathToRegexpOptions.sensitive = route.caseSensitive
   }
 
-  const record: RouteRecord = {
+  const record: RouteRecord = { // 可以理解为需要把RouteConfig解析成RouteRecord以便后面好解析
     path: normalizedPath,
     regex: compileRouteRegex(normalizedPath, pathToRegexpOptions),
     components: route.components || { default: route.component },
@@ -99,13 +110,14 @@ function addRouteRecord (
         ? {}
         : route.components
           ? route.props
-          : { default: route.props }
+          : { default: route.props } // route.components不存在时就是component
   }
 
   if (route.children) {
     // Warn if route is named, does not redirect and has a default child route.
     // If users navigate to this route by name, the default child will
     // not be rendered (GH Issue #629)
+    // TODO: 为什么会出现这个问题，以及出现这个问题为什么不解决，而是抛一个警告
     if (process.env.NODE_ENV !== 'production') {
       if (
         route.name &&
@@ -125,6 +137,8 @@ function addRouteRecord (
       }
     }
     route.children.forEach(child => {
+      // 第一次传进来时matchAs是undefined，那么matchAs永远为undefined?
+      // => 并不是，后面在路由别名时会把当前record.path作为matchAs传进来
       const childMatchAs = matchAs
         ? cleanPath(`${matchAs}/${child.path}`)
         : undefined
@@ -149,7 +163,7 @@ function addRouteRecord (
         // skip in dev to make it work
         continue
       }
-
+      // 如果有别名，则重新调用addRouteRecord为pathList、pathMap生成对应的路由
       const aliasRoute = {
         path: alias,
         children: route.children
@@ -179,7 +193,7 @@ function addRouteRecord (
 }
 
 /**
- * d
+ * 将RouteConfig中path编译成正则表达式
  * @param {*} path
  * @param {*} pathToRegexpOptions
  */

@@ -8,6 +8,7 @@ const regexpCompileCache: {
   [key: string]: Function
 } = Object.create(null)
 
+// 根据参数params填充形如/user/:id的路径为/user/123
 export function fillParams (
   path: string,
   params: ?Object,

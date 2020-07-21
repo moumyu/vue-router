@@ -9,7 +9,7 @@ export function resolvePath (
   if (firstChar === '/') {
     return relative
   }
-
+  // TODO: 这个后面什么情况下执行
   if (firstChar === '?' || firstChar === '#') {
     return base + relative
   }

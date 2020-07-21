@@ -52,7 +52,7 @@ export function normalizeLocation (
   const basePath = (current && current.path) || '/'
   const path = parsedPath.path
     ? resolvePath(parsedPath.path, basePath, append || next.append)
-    : basePath
+    : basePath // 这里暂且认为返回的就是parsedPath.path
 
   // 将query解析成对象的形式
   const query = resolveQuery(
