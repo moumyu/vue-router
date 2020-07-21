@@ -96,6 +96,10 @@ export default {
 
     const data: any = { class: classes }
 
+    // 一般来说都会有$hasNormal，那么怎么执行default函数
+    // 当含有scopeSlot的时候$hasNormal为false
+    // 将href/route/navigate/isActive/isExactActive暴露给scopedSlot
+    // 执行default返回一个渲染的[Vnode]
     const scopedSlot =
       !this.$scopedSlots.$hasNormal &&
       this.$scopedSlots.default &&
@@ -107,7 +111,7 @@ export default {
         isExactActive: classes[exactActiveClass]
       })
 
-    if (scopedSlot) {
+    if (scopedSlot) { // 当含有v-slot时整个router-link组件返回scopedSlot vnode
       if (scopedSlot.length === 1) {
         return scopedSlot[0]
       } else if (scopedSlot.length > 1 || !scopedSlot.length) {
@@ -156,6 +160,7 @@ export default {
         aAttrs['aria-current'] = ariaCurrentValue
       } else {
         // doesn't have <a> child, apply listener to self
+        // 没有a标签，则直接把事件给当前vnode
         data.on = on
       }
     }
@@ -184,6 +189,7 @@ function guardEvent (e) {
   return true
 }
 
+// 找到子vnode直到有a的vnode
 function findAnchor (children) {
   if (children) {
     let child

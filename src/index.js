@@ -19,11 +19,11 @@ export default class VueRouter {
   static install: () => void;
   static version: string;
 
-  app: any;
-  apps: Array<any>;
+  app: any; // 调用init的当前vue实例
+  apps: Array<any>; // vue实例数组
   ready: boolean;
   readyCbs: Array<Function>;
-  options: RouterOptions;
+  options: RouterOptions; // 构造VueRouter传进来的option
   mode: string;
   history: HashHistory | HTML5History | AbstractHistory;
   matcher: Matcher;

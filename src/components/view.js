@@ -23,9 +23,11 @@ export default {
 
     // determine current view depth, also check to see if the tree
     // has been toggled inactive but kept-alive.
+    // 找到router-view的层级，此外是否在keepAlive下
     let depth = 0
     let inactive = false
     while (parent && parent._routerRoot !== parent) {
+      // $vnode只有为组件时才存在
       const vnodeData = parent.$vnode ? parent.$vnode.data : {}
       if (vnodeData.routerView) {
         depth++
@@ -54,7 +56,7 @@ export default {
       }
     }
 
-    const matched = route.matched[depth]
+    const matched = route.matched[depth] // TODO: 根据深度拿到matched？
     const component = matched && matched.components[name]
 
     // render empty node if no matched route or no config component
@@ -68,6 +70,7 @@ export default {
 
     // attach instance registration hook
     // this will be called in the instance's injected lifecycle hooks
+    // TODO: 这个函数有什么用
     data.registerRouteInstance = (vm, val) => {
       // val could be undefined for unregistration
       const current = matched.instances[name]
