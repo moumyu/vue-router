@@ -16,6 +16,7 @@ export class HTML5History extends History {
     this._startLocation = getLocation(this.base) // 初始化路径（去掉base）
   }
 
+  // 启动监听，主要是滚动事件
   setupListeners () {
     if (this.listeners.length > 0) {
       return

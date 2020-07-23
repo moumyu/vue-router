@@ -10,7 +10,7 @@ const positionStore = Object.create(null)
 export function setupScroll () {
   // Prevent browser scroll behavior on History popstate
   if ('scrollRestoration' in window.history) {
-    window.history.scrollRestoration = 'manual'
+    window.history.scrollRestoration = 'manual' // 使浏览器默认滚动行为改为手动
   }
   // Fix for #1585 for Firefox
   // Fix for #2195 Add optional third attribute to workaround a bug in safari https://bugs.webkit.org/show_bug.cgi?id=182678
@@ -22,7 +22,7 @@ export function setupScroll () {
   // preserve existing history state as it could be overriden by the user
   const stateCopy = extend({}, window.history.state)
   stateCopy.key = getStateKey()
-  window.history.replaceState(stateCopy, '', absolutePath)
+  window.history.replaceState(stateCopy, '', absolutePath) // TODO: 这里为什么要执行这个
   window.addEventListener('popstate', handlePopState)
   return () => {
     window.removeEventListener('popstate', handlePopState)
@@ -88,7 +88,7 @@ export function saveScrollPosition () {
     }
   }
 }
-
+// 保存page滚动的位置并设置新的state key作为滚动位置的key
 function handlePopState (e) {
   saveScrollPosition()
   if (e.state && e.state.key) {

@@ -16,6 +16,7 @@ export function createNavigationRedirectedError (from, to) {
   )
 }
 
+// 创建导航重复的错误
 export function createNavigationDuplicatedError (from, to) {
   return createRouterError(
     from,
@@ -47,6 +48,7 @@ export function createNavigationAbortedError (from, to) {
   )
 }
 
+// 根据from/to创建一个error
 function createRouterError (from, to, type, message) {
   const error = new Error(message)
   error._isRouter = true

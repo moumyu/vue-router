@@ -32,7 +32,7 @@ export function pushState (url?: string, replace?: boolean) {
       // preserve existing history state as it could be overriden by the user
       const stateCopy = extend({}, history.state)
       stateCopy.key = getStateKey()
-      history.replaceState(stateCopy, '', url)
+      history.replaceState(stateCopy, '', url) // TODO 为什么replaceState需要上一次的stateCopy
     } else {
       history.pushState({ key: setStateKey(genStateKey()) }, '', url)
     }
