@@ -93,7 +93,7 @@ export class HashHistory extends History {
     }
   }
 
-  getCurrentLocation () {
+  zgetCurrentLocation () {
     return getHash()
   }
 }

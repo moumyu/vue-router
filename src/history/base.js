@@ -81,9 +81,9 @@ export class History {
     this.confirmTransition(
       route,
       () => {
-        const prev = this.current
-        this.updateRoute(route)
-        onComplete && onComplete(route)
+        const prev = this.current // 保留当前route
+        this.updateRoute(route) // 更新当前route（this.current）
+        onComplete && onComplete(route) // 保留滚动相关
         this.ensureURL()
         // 此时跳转玩后才执行afterHooks
         this.router.afterHooks.forEach(hook => {
@@ -233,6 +233,8 @@ export class History {
     })
   }
 
+  // 更新最新this.current为route，执行cb
+  // TODO: 这里的cb何时传进来的？
   updateRoute (route: Route) {
     this.current = route
     this.cb && this.cb(route)
@@ -270,6 +272,10 @@ function normalizeBase (base: ?string): string { // 将base标准化
   return base.replace(/\/$/, '')
 }
 
+// 比较current matched和route matched数组，找到不同路径开始的索引
+// 需要更新的是0~不同的路径开始的索引
+// 需要激活/失活的是不用路径开始的索引
+// 比如/base/bar -> /base/foo，需要更新的就是/base，需要激活就是/foo，失活的是/bar
 function resolveQueue (
   current: Array<RouteRecord>,
   next: Array<RouteRecord>
