@@ -19,6 +19,7 @@ export function resolveAsyncComponents (matched: Array<RouteRecord>): Function {
         hasAsync = true
         pending++
 
+        // 这里的resolvedDef可能是以require或import的形式
         const resolve = once(resolvedDef => {
           if (isESModule(resolvedDef)) {
             resolvedDef = resolvedDef.default
@@ -69,6 +70,7 @@ export function resolveAsyncComponents (matched: Array<RouteRecord>): Function {
   }
 }
 
+// 将matched的RouterRecord循环执行fn，返回对应的生命周期函数数组
 export function flatMapComponents (
   matched: Array<RouteRecord>,
   fn: Function

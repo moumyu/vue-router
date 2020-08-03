@@ -209,6 +209,7 @@ export class History {
       }
     }
 
+    // runQueue将queue中每个函数取出来执行iterator，直到最后执行cb
     runQueue(queue, iterator, () => {
       const postEnterCbs = []
       const isValid = () => this.current === route
