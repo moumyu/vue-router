@@ -31,7 +31,8 @@ export function normalizeLocation (
   }
 
   // relative params
-  // TODO: 这种情况什么时候会发生
+  // 这种情况什么时候会发生
+  // => 在当前路由的基础之上，只改变params时发生
   if (!next.path && next.params && current) {
     next = extend({}, next)
     next._normalized = true

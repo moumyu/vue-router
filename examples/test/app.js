@@ -103,10 +103,14 @@ const vueInstance = new Vue({
       <router-link :to="{ name: 'foo' }">跳转到foo</router-link>
       <hr />
       <h3>命名路由router-link中的query会被丢弃</h3>
+      <h5>并不会被丢弃，在跳转命名路由时，在normalizeLocation中如果是命名路由，则直接返回新的raw（并没有丢弃原来的属性，只是复制了params）</h5>
       <router-link :to="{ name: 'foo', query: { name: 'muyu' } }">命名路由带query</router-link>
       <hr />
       <h3>观察带有参数的路由跳转时match中对params的处理情况</h3>
-      <router-link :to="{ name: 'links', params: { name: 'muyu1', age: 25 } }">命名路由带query</router-link>
+      <router-link :to="{ name: 'links', params: { name: 'muyu1', age: 25 } }">命名路由带params</router-link>
+      <hr />
+      <h3>路由导航中只有params的情况</h3>
+      <router-link :to="{ params: { name: 'muyu1', age: 26 } }">只带params的RawLocation</router-link>
       <div style="height: 20px; border-bottom: 2px solid #e1e1e1"></div>
       <div>----------- 以下为router-view -----------</div>
       <router-view class="view"></router-view>
