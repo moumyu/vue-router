@@ -122,6 +122,7 @@ export default class VueRouter {
       const setupListeners = () => {
         history.setupListeners()
       }
+      // TODO: 这个过程中如果是hash模式如何做到不触发hashchange事件而重复触发beforeEnter钩子函数的呢？
       history.transitionTo(history.getCurrentLocation(), setupListeners, setupListeners)
     }
 

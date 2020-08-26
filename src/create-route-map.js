@@ -164,6 +164,8 @@ function addRouteRecord (
         continue
       }
       // 如果有别名，则重新调用addRouteRecord为pathList、pathMap生成对应的路由
+      // 之所以不传入类似component属性，是因为传入了当前path作为matchAs，
+      // TODO：在后续匹配中会以matchAs属性作为匹配吗？
       const aliasRoute = {
         path: alias,
         children: route.children

@@ -26,6 +26,7 @@ export default {
     // 找到router-view的层级，此外是否在keepAlive下
     let depth = 0
     let inactive = false
+    // 一直向上层寻找，直到找到Vue实例
     while (parent && parent._routerRoot !== parent) {
       // $vnode只有为组件时才存在
       const vnodeData = parent.$vnode ? parent.$vnode.data : {}
