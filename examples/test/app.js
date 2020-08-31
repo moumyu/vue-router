@@ -39,7 +39,9 @@ const Unicode = { template: '<div>unicode</div>' }
 const Child1 = { template: '<div>child one</div>' }
 const Child2 = { template: '<div>child two</div>' }
 const Child3 = { template: '<div>child three</div>' }
-const Params = { tempalte: '<div>params</div>' }
+const Params = {
+  template: '<div>params: {{ $route.params }}</div>'
+}
 
 // 3. Create the router
 const router = new VueRouter({
@@ -111,6 +113,9 @@ const vueInstance = new Vue({
       <hr />
       <h3>路由导航中只有params的情况</h3>
       <router-link :to="{ params: { name: 'muyu1', age: 26 } }">只带params的RawLocation</router-link>
+      <hr />
+      <h3>路由导航中同时含有path和params时，params会被丢弃</h3>
+      <router-link :to="{ path: '/params/12', params: { name: 'muyu1', age: 26 } }">只带params的RawLocation</router-link>
       <div style="height: 20px; border-bottom: 2px solid #e1e1e1"></div>
       <div>----------- 以下为router-view -----------</div>
       <router-view class="view"></router-view>

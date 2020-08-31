@@ -8,7 +8,8 @@ import { warn } from './warn'
 import { extend } from './misc'
 
 // 将当前raw路径解析，并返回path/query/hash
-// TODO: 这里为什么不返回params
+// 这里为什么不返回params
+// => 注意看当raw包含name和相对params时候是返回了params的，只是说如果有path的情况，会忽略掉params
 export function normalizeLocation (
   raw: RawLocation,
   current: ?Route,
@@ -49,11 +50,13 @@ export function normalizeLocation (
     return next
   }
 
+  // 以下为必有path的情况
   const parsedPath = parsePath(next.path || '')
   const basePath = (current && current.path) || '/'
   const path = parsedPath.path
     ? resolvePath(parsedPath.path, basePath, append || next.append)
     : basePath // 这里暂且认为返回的就是parsedPath.path
+  // => 不可以，这个因为location中可以不传入path，这里为不传入path做了一个规避
 
   // 将query解析成对象的形式
   const query = resolveQuery(

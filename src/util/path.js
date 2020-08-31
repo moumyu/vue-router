@@ -1,5 +1,10 @@
 /* @flow */
 
+// 确定path路径
+// 传入此函数的有三种情况
+// 1.以/开头，直接返回路径
+// 2.以?或者#开头，返回current.path + path
+// 3.相对path，先把current.path取出来一个，再根据传入path主意加入
 export function resolvePath (
   relative: string,
   base: string,
@@ -10,6 +15,7 @@ export function resolvePath (
     return relative
   }
   // TODO: 这个后面什么情况下执行
+  // => 这里从parsePath中出来的path不可能有'?'或者'#'，其他地方是否存在调用resolvePath的情况？
   if (firstChar === '?' || firstChar === '#') {
     return base + relative
   }
@@ -19,11 +25,14 @@ export function resolvePath (
   // remove trailing segment if:
   // - not appending
   // - appending to trailing slash (last segment is empty)
+  // 如果不是append或者stack最后一个不存在，则取出
+  // 此时因为形如/path/path1，如果没有append的情况下可能变为/path/path2
   if (!append || !stack[stack.length - 1]) {
     stack.pop()
   }
 
   // resolve relative path
+  // 这个为什么把斜杠去掉，又要以斜杠分割 => 这里是指整个字符串以斜杠开头，并非替换掉中间的斜杠
   const segments = relative.replace(/^\//, '').split('/')
   for (let i = 0; i < segments.length; i++) {
     const segment = segments[i]

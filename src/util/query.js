@@ -51,7 +51,7 @@ function parseQuery (query: string): Dictionary<string> {
     const parts = param.replace(/\+/g, ' ').split('=')
     const key = decode(parts.shift())
     const val = parts.length > 0
-      ? decode(parts.join('='))
+      ? decode(parts.join('=')) // 这里不管后面有多少=号，都一律处理为键值
       : null
 
     if (res[key] === undefined) {

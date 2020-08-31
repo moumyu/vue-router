@@ -35,7 +35,7 @@ export function createMatcher (
     // TODO: 这里的raw并不等于router-link的to的值？
     // 将其标准化为{ hash, path, query, _normalized }的形式
     const location = normalizeLocation(raw, currentRoute, false, router)
-    const { name } = location // 当raw中有name时才会有
+    const { name } = location // 当raw中有name时或者相对路由中current.name存在时才会有
 
     if (name) {
       const record = nameMap[name]
