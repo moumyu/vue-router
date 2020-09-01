@@ -85,6 +85,11 @@ const router = new VueRouter({
           component: Child3
         }
       ]
+    },
+    {
+      path: '/user-*',
+      name: 'user',
+      component: { template: '<div>user</div>' }
     }
   ]
 })

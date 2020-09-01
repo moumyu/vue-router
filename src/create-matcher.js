@@ -43,7 +43,7 @@ export function createMatcher (
         warn(record, `Route with name '${name}' does not exist`)
       }
       if (!record) return _createRoute(null, location)
-      const paramNames = record.regex.keys // raw对应的record的参数名称
+      const paramNames = record.regex.keys // raw对应的record的params参数名称
         .filter(key => !key.optional)
         .map(key => key.name)
 
@@ -52,7 +52,15 @@ export function createMatcher (
       }
 
       // 这个currentRoute应该指的是跳转之前的相对Route，相同层级的路由跳转currentRoute为其父路由
-      // TODO: 这里到底有什么用？
+      // 这里到底有什么用？
+      // => 在normalizeLocation中如果name存在或者相对params的情况都只保留了raw中的params
+      //    此时并没有基于currentRoute来合并params，在下面就是如果location.params中不存在的
+      //    但是在record.regex.keys(即路由必须的参数)存在的，则加入到location.params中
+      //    这里合并到location中是因为在createRoute的时候，params是取的location的params
+      // 为什么不合并query？
+      // => 因为在normalizeLocation中已经对query进行了合并
+      // 为什么不把合并params的操作放到normalizeLocation中？
+      // => 大概是由于不愿传递record？？？
       if (currentRoute && typeof currentRoute.params === 'object') {
         for (const key in currentRoute.params) {
           if (!(key in location.params) && paramNames.indexOf(key) > -1) {
@@ -192,12 +200,13 @@ function matchRoute (
   } else if (!params) {
     return true
   }
-
+  // 注意i从1开始，忽略match原本的值
   for (let i = 1, len = m.length; i < len; ++i) {
     const key = regex.keys[i - 1]
     const val = typeof m[i] === 'string' ? decodeURIComponent(m[i]) : m[i]
     if (key) {
       // Fix #1994: using * with props: true generates a param named 0
+      // 如果形如{ path: '/user-*' }，则会key.name会被编译为0
       params[key.name || 'pathMatch'] = val
     }
   }
