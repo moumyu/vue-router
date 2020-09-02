@@ -19,10 +19,13 @@ export function normalizeLocation (
   let next: Location = typeof raw === 'string' ? { path: raw } : raw // 封装要跳转的路径
   // named target
   // 如果已经被normalized了直接返回
-  // TODO: 是否只有这个函数返回的normalized
+  // 是否只有这个函数返回的normalized
+  // => 并非只有这个函数，当RouteConfig中含有redirect和alias时就会有_normalized，
+  //    此时，直接返回这个对象
   if (next._normalized) {
     return next
   } else if (next.name) { // 如果next.name存在，这个函数基本就返回next对象
+    // TODO: 为什么这里不需要被_normalized
     next = extend({}, raw)
     const params = next.params
     if (params && typeof params === 'object') {

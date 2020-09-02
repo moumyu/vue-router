@@ -61,6 +61,25 @@ const router = new VueRouter({
       ]
     },
     {
+      path: '/redirect',
+      redirect: (to) => {
+        // return '/params/12'
+        return {
+          path: '/params/:name',
+          params: {
+            name: '111'
+          },
+          query: {
+            age: 26
+          }
+        }
+      }
+    },
+    {
+      path: '/redirect1',
+      redirect: '#popup'
+    },
+    {
       path: '/bar',
       alias: '/par',
       component: Bar,
@@ -121,6 +140,12 @@ const vueInstance = new Vue({
       <hr />
       <h3>路由导航中同时含有path和params时，params会被丢弃</h3>
       <router-link :to="{ path: '/params/12', params: { name: 'muyu1', age: 26 } }">只带params的RawLocation</router-link>
+      <hr />
+      <h3>如果路由配置里redirect返回一个对象，to里面path、params、query将会被覆盖</h3>
+      <router-link :to="{ path: '/redirect', params: { name: 'muyu1', age: 25 }, query: { age: 27 } }">带params和query的重定向</router-link>
+      <hr />
+      <h3>如果路由配置里redirect以'#'或者'?'开头</h3>
+      <router-link :to="{ path: '/redirect1' }">基于/redirect1父路由来重定向</router-link>
       <div style="height: 20px; border-bottom: 2px solid #e1e1e1"></div>
       <div>----------- 以下为router-view -----------</div>
       <router-view class="view"></router-view>

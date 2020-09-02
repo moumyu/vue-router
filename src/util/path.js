@@ -14,8 +14,9 @@ export function resolvePath (
   if (firstChar === '/') {
     return relative
   }
-  // TODO: 这个后面什么情况下执行
+  // 这个后面什么情况下执行
   // => 这里从parsePath中出来的path不可能有'?'或者'#'，其他地方是否存在调用resolvePath的情况？
+  // => 在redirect中，执行resolveRecordPath带过来的path可能以'?'或者'#'号开头的情况
   if (firstChar === '?' || firstChar === '#') {
     return base + relative
   }

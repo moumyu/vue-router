@@ -11,6 +11,7 @@ export class HashHistory extends History {
   constructor (router: Router, base: ?string, fallback: boolean) {
     super(router, base)
     // check history fallback deeplinking
+    // 一般来说fallback会为false，此种情况是由于history模式被回退，而导致路径需要增加/#的问题
     if (fallback && checkFallback(this.base)) {
       return
     }

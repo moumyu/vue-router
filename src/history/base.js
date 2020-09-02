@@ -32,7 +32,8 @@ export class History {
   cleanupListeners: Function
 
   // implemented by sub-classes
-  // TODO 这些加号有什么用？
+  // 这些加号有什么用？
+  // flow.js的写法，表明这个方法为只读，其实现由其子类实现
   +go: (n: number) => void
   +push: (loc: RawLocation) => void
   +replace: (loc: RawLocation) => void

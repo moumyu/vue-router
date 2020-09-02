@@ -111,6 +111,11 @@ export function createMatcher (
     const re: Object = redirect
     const { name, path } = re
     let { query, hash, params } = location
+    // 为什么这里要以redirect为基准
+    // => 因为这里RouteRecord.redirect可能为一个函数
+    //    如果这个函数返回string，则redirect为 { path: 'xxx' }
+    //    但是如果这个函数返回一个 { path: 'xxx', params: 'xxx', query: 'xxx' }
+    //    就需要以此为基准，location里面的path、params、query都是无效的
     query = re.hasOwnProperty('query') ? re.query : query
     hash = re.hasOwnProperty('hash') ? re.hash : hash
     params = re.hasOwnProperty('params') ? re.params : params
@@ -159,6 +164,9 @@ export function createMatcher (
       path: aliasedPath
     })
     if (aliasedMatch) {
+      // 为什么这里还要多此一举将location.params得到路径的matched的params重新赋值给location.params
+      // => 因为并且别名处于子路由中，location.params不但是父路由的参数也是子路由的参数
+      //    所以取到aliasedRecord.params是只针对此别名的参数
       const matched = aliasedMatch.matched
       const aliasedRecord = matched[matched.length - 1]
       location.params = aliasedMatch.params
@@ -172,6 +180,7 @@ export function createMatcher (
     location: Location,
     redirectedFrom?: Location
   ): Route {
+    // 为什么要单独对冲定向进行处理，因为重定向中是以redirect为基准来跳转的
     if (record && record.redirect) {
       return redirect(record, redirectedFrom || location)
     }
@@ -215,5 +224,7 @@ function matchRoute (
 }
 
 function resolveRecordPath (path: string, record: RouteRecord): string {
+  // 这里为什么要以parent为base
+  // 因为对于redirect来说它就是以相对其父路由来重定向的
   return resolvePath(path, record.parent ? record.parent.path : '/', true)
 }
