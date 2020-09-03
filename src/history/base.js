@@ -135,6 +135,9 @@ export class History {
     if (
       isSameRoute(route, current) &&
       // in the case the route map has been dynamically appended to
+      // TODO: 这里为什么要比较两者matched的长度
+      // => 我觉得这里current.matched在一轮transitionTo或者开始时已经被确定了
+      //    但是router map可以通过addRoutes来改变
       route.matched.length === current.matched.length
     ) {
       this.ensureURL()
