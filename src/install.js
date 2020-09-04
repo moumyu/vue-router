@@ -25,9 +25,13 @@ export function install (Vue) {
         this._routerRoot = this
         this._router = this.$options.router
         this._router.init(this)
-        Vue.util.defineReactive(this, '_route', this._router.history.current) // TODO 这里有什么用？
+        Vue.util.defineReactive(this, '_route', this._router.history.current)
+        // 这里有什么用？
         // 这里为什么不像上面那样通过this._route = current来赋值，而是通过defineReactive
         // 来定义响应式，以后会有修改_route的情况吗？
+        // 在VueRouter.init中，执行history.listen为history中的cb增加了一个函数，
+        // 该函数调用app._route = route来触发Vue的响应式更新渲染
+        // 而在每次confirmTransition成功之后的updateRoute都会执行该函数
       } else {
         this._routerRoot = (this.$parent && this.$parent._routerRoot) || this
       }

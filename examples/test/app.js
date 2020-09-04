@@ -32,7 +32,17 @@ Vue.use(VueRouter)
 
 // 2. Define route components
 const Home = { template: '<div>home</div>' }
-const Foo = { template: '<div><div>foo</div><router-view></router-view></div>' }
+const Foo = {
+  template: '<div><div>foo</div><router-view></router-view></div>',
+  beforeRouteEnter (to, from, next) {
+    console.log(this)
+    next()
+  },
+  beforeRouteLeave (to, from, next) {
+    console.log(this)
+    next()
+  }
+}
 const Bar = { template: '<div>bar</div>' }
 const Unicode = { template: '<div>unicode</div>' }
 

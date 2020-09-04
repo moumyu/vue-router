@@ -92,7 +92,8 @@ export class History {
         })
 
         // fire ready cbs once
-        // TODO 这个ready callbacks又是什么
+        // 这个ready callbacks又是什么
+        // readyCbs为router.onReady注入的函数
         if (!this.ready) {
           this.ready = true
           this.readyCbs.forEach(cb => {
@@ -166,10 +167,11 @@ export class History {
       // 然后是被激活组件的enter
       activated.map(m => m.beforeEnter),
       // async components
-      // TODO 这里是全局beforeResolve还是仅仅是异步组件
+      // 这里是全局beforeResolve还是仅仅是异步组件
+      // 仅仅只是解析异步组件
       resolveAsyncComponents(activated)
-      // 最后的全局的afterEach去哪里了
-      // => 这里还不能执行afterHooks，因为这里要在transitionTo的compolete参数中才执行真正
+      // 还有beforeRouteEnter、全局的beforeResolve、afterEach去哪里了
+      // => 这里还不能执行afterHooks，因为这里要在transitionTo的complete参数中才执行真正
       // 的路由跳转，跳转之后才能执行afterHooks
     )
 
@@ -376,6 +378,7 @@ function bindEnterGuard (
   cbs: Array<Function>,
   isValid: () => boolean
 ): NavigationGuard {
+  // beforeRouteEnter不要绑定实例，因为此时实例还未被创建
   return function routeEnterGuard (to, from, next) {
     return guard(to, from, cb => {
       if (typeof cb === 'function') {
@@ -385,6 +388,10 @@ function bindEnterGuard (
           // the instance may not have been registered at this time.
           // we will need to poll for registration until current route
           // is no longer valid.
+          // 如果router-view被transition包裹，实例在此时还没有被注册,
+          // 就需要在current存在之后执行poll
+          // 这解决在beforeRouteEnter里面，如果next是一个函数，并且需要绑定this
+          // 需要等到实例化完成之后再执行
           poll(cb, match.instances, key, isValid)
         })
       }

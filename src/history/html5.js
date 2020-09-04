@@ -18,6 +18,8 @@ export class HTML5History extends History {
 
   // 启动监听，主要是滚动事件
   setupListeners () {
+    // this.listeners只有一个移除popstate事件的函数
+    // 并非只有一个，下面还会针对popstate事件增加处理函数
     if (this.listeners.length > 0) {
       return
     }
