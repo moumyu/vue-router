@@ -32,7 +32,9 @@ export function createMatcher (
     currentRoute?: Route,
     redirectedFrom?: Location
   ): Route {
-    // TODO: 这里的raw并不等于router-link的to的值？
+    // 这里的raw并不等于router-link的to的值？
+    // => 不一定，如果任何像transitionTo传入的location都可能是其值，还有在redirect中传入的
+    //    raw就为其处理之后的Location的值
     // 将其标准化为{ hash, path, query, _normalized }的形式
     const location = normalizeLocation(raw, currentRoute, false, router)
     const { name } = location // 当raw中有name时或者相对路由中current.name存在时才会有

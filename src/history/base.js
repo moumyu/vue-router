@@ -241,7 +241,9 @@ export class History {
   }
 
   // 更新最新this.current为route，执行cb
-  // TODO: 这里的cb何时传进来的？
+  // 这里的cb何时传进来的？
+  // => 在VueRouter.init中会调用history.listen传入cb函数
+  //    该函数从apps中取出app并且更新去_route属性，重新触发实例渲染函数
   updateRoute (route: Route) {
     this.current = route
     this.cb && this.cb(route)
