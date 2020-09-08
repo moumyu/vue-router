@@ -62,6 +62,7 @@ export class HTML5History extends History {
     const { current: fromRoute } = this
     this.transitionTo(location, route => {
       pushState(cleanPath(this.base + route.fullPath))
+      // 这里的isPop有且仅当通过浏览器前进/后退按钮点击时才为true
       handleScroll(this.router, route, fromRoute, false)
       onComplete && onComplete(route)
     }, onAbort)

@@ -121,6 +121,11 @@ const router = new VueRouter({
       component: { template: '<div>user</div>' }
     }
   ]
+  // scrollBehavior: function () {
+  //   return {
+  //     selector: '#test'
+  //   }
+  // }
 })
 
 // 4. Create and mount root instance.
@@ -156,6 +161,15 @@ const vueInstance = new Vue({
       <hr />
       <h3>如果路由配置里redirect以'#'或者'?'开头</h3>
       <router-link :to="{ path: '/redirect1' }">基于/redirect1父路由来重定向</router-link>
+      <hr />
+      <h3>测试路由跳转滚动到对应的锚点</h3>
+      <a id="anchor">test锚点</a>
+      <hr />
+      <h3>当query的key值相同value值不同时还是active class，但不是exact active class</h3>
+      <router-link :to="{ name: 'foo', query: { name: 'alex' } }">name为foo，query为{ name: 'alex' }的路由</router-link>
+      <hr />
+      <h3>当query的key值不同时就不是active class</h3>
+      <router-link :to="{ name: 'foo', query: { age: 12 } }">name为foo，query为{ age: 12 }的路由</router-link>
       <div style="height: 20px; border-bottom: 2px solid #e1e1e1"></div>
       <div>----------- 以下为router-view -----------</div>
       <router-view class="view"></router-view>

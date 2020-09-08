@@ -7,6 +7,10 @@ import { extend } from './misc'
 
 const positionStore = Object.create(null)
 
+// 设置滚动行为为手动
+// 为history state设置初始值
+// 并replace到当前地址
+// 设置popstate监听事件，返回取消监听函数
 export function setupScroll () {
   // Prevent browser scroll behavior on History popstate
   if ('scrollRestoration' in window.history) {
@@ -31,6 +35,7 @@ export function setupScroll () {
   }
 }
 
+// 处理滚动事件
 export function handleScroll (
   router: Router,
   to: Route,
@@ -139,6 +144,7 @@ function isNumber (v: any): boolean {
 
 const hashStartsWithNumberRE = /^#\d/
 
+// 滚动到指定的位置
 function scrollToPosition (shouldScroll, position) {
   const isObject = typeof shouldScroll === 'object'
   if (isObject && typeof shouldScroll.selector === 'string') {

@@ -126,7 +126,9 @@ export function isIncludedRoute (current: Route, target: Route): boolean {
 }
 
 // 比较两个query，如果target中的key在current中不存在则返回false
-// TODO: 这里并没有比较其他可能的情况，如：value不等，是否会引起bug
+// 这里并没有比较其他可能的情况，如：value不等，是否会引起bug
+// => 不会引起bug，这里对于active class来说不同的query的value也是active class但是不同
+//    的key则不会
 function queryIncludes (current: Dictionary<string>, target: Dictionary<string>): boolean {
   for (const key in target) {
     if (!(key in current)) {

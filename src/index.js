@@ -49,7 +49,9 @@ export default class VueRouter {
       mode = 'hash'
     }
     if (!inBrowser) {
-      mode = 'abstract' // TODO abstract是什么模式，abstract是node.js，但是node.js为什么需要router?
+      mode = 'abstract' // abstract是什么模式，abstract是node.js，但是node.js为什么需要router?
+      // => 不一定是Node.js例如一些不支持浏览器API的环境（如：移动原生环境）也会自动退回到abstract模式
+      // => 在这个模式中，仅使用stack和index来维护当前路由历史
     }
     this.mode = mode
 
