@@ -18,7 +18,7 @@ export default {
     // so that components rendered by router-view can resolve named slots
     const h = parent.$createElement
     const name = props.name
-    const route = parent.$route
+    const route = parent.$route // router current route
     const cache = parent._routerViewCache || (parent._routerViewCache = {})
 
     // determine current view depth, also check to see if the tree
@@ -47,6 +47,8 @@ export default {
       if (cachedComponent) {
         // #2301
         // pass props
+        // 这个configProps从哪里来？
+        // => 下面处理中会将matched.props赋值给它
         if (cachedData.configProps) {
           fillPropsinData(cachedComponent, data, cachedData.route, cachedData.configProps)
         }
@@ -57,7 +59,10 @@ export default {
       }
     }
 
-    const matched = route.matched[depth] // TODO: 根据深度拿到matched？
+    // 根据深度拿到matched？
+    // => 这里就是根据router-view层级去匹配matched，得到的matched就是当前
+    //    path所对应的RouterRecord
+    const matched = route.matched[depth]
     const component = matched && matched.components[name]
 
     // render empty node if no matched route or no config component
@@ -71,9 +76,16 @@ export default {
 
     // attach instance registration hook
     // this will be called in the instance's injected lifecycle hooks
-    // TODO: 这个函数有什么用
+    // 这个函数有什么用
+    // => 看上面的解释，注入vm实例，在组件内路由生命周期执行时需要
+    //    在每个实例执行beforeCreate(由router混入)时执行
+    //    functional组件中render会首先执行返回生成的Vnode
+    //    因为在函数式组件中不会用到this（需要等到组件beforeCreate之后）
+    //    所以真正渲染router-view时，beforeCreate函数中已经存在registerRouteInstance
     data.registerRouteInstance = (vm, val) => {
       // val could be undefined for unregistration
+      // val的值是undefined或者未注册，也就是一般来说说matched.instances[name]的值只能
+      // 初始化为vm或者再取消为undefined
       const current = matched.instances[name]
       if (
         (val && current !== vm) ||

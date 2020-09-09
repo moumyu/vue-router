@@ -170,6 +170,9 @@ const vueInstance = new Vue({
       <hr />
       <h3>当query的key值不同时就不是active class</h3>
       <router-link :to="{ name: 'foo', query: { age: 12 } }">name为foo，query为{ age: 12 }的路由</router-link>
+      <hr />
+      <h3>当路由配置项props为true时，路由参数会覆盖</h3>
+      <router-link :to="{ name: 'foo', query: { age: 12 } }">name为foo，query为{ age: 12 }的路由</router-link>
       <div style="height: 20px; border-bottom: 2px solid #e1e1e1"></div>
       <div>----------- 以下为router-view -----------</div>
       <router-view class="view"></router-view>

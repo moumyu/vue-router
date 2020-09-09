@@ -11,7 +11,8 @@ export function install (Vue) {
 
   const isDef = v => v !== undefined
 
-  // TODO 在RouterView中有registerRouteInstance
+  // 在RouterView中有registerRouteInstance
+  // => 此函数用于当实例被执行完后，像router-view中注入vm实例，用于路由生命周期函数调用
   const registerInstance = (vm, callVal) => {
     let i = vm.$options._parentVnode
     if (isDef(i) && isDef(i = i.data) && isDef(i = i.registerRouteInstance)) {
