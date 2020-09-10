@@ -32,7 +32,8 @@ export function createRouteMap (
   })
 
   // ensure wildcard routes are always at the end
-  // TODO 将通配符路径放到最后，这个意思是在vue-router中，我们可以将routes中的通配符路径定义到前面？
+  // 将通配符路径放到最后，这个意思是在vue-router中，我们可以将routes中的通配符路径定义到前面？
+  // => 可以，会被下面的代码移动到最后
   for (let i = 0, l = pathList.length; i < l; i++) {
     if (pathList[i] === '*') {
       pathList.push(pathList.splice(i, 1)[0])
@@ -117,7 +118,13 @@ function addRouteRecord (
     // Warn if route is named, does not redirect and has a default child route.
     // If users navigate to this route by name, the default child will
     // not be rendered (GH Issue #629)
-    // TODO: 为什么会出现这个问题，以及出现这个问题为什么不解决，而是抛一个警告
+    // 为什么会出现这个问题，以及出现这个问题为什么不解决，而是抛一个警告
+    // => 这里是故意为之，当根据命名路由去导航时只会导航到当前命名路由
+    //    从解析上来看，当只有name时match到RouteRecord只是当前RouteRecord（不包含子RouteRecord）
+    //    也就是说创建Route时的matched也不包含子RouteRecord，而router-view是在matched中去拿到RouteRecord
+    //    的component来进行渲染，所以此时默认子路由不会被渲染。而如果是path的话则是从pathMap中拿（并非直接从pathMap
+    //    中拿，会循环pathList，根据path对应的RouteRecord.regex去匹配，因为这里子路由的path总是在父路由前面，
+    //    所以子路由对应的RouteRecord总是会被先匹配到（/foo和/foo/对应的正则是一样的））则会被渲染
     if (process.env.NODE_ENV !== 'production') {
       if (
         route.name &&
@@ -165,7 +172,8 @@ function addRouteRecord (
       }
       // 如果有别名，则重新调用addRouteRecord为pathList、pathMap生成对应的路由
       // 之所以不传入类似component属性，是因为传入了当前path作为matchAs，
-      // TODO：在后续匹配中会以matchAs属性作为匹配吗？
+      // 在后续匹配中会以matchAs属性作为匹配吗？
+      // => 会，在match中，如果匹配到有matchAs的RouteRecord，则会用matchAs去作为路径来创建Route
       const aliasRoute = {
         path: alias,
         children: route.children

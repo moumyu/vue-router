@@ -141,7 +141,7 @@ const vueInstance = new Vue({
         <em style="color: red">点击下方链接会渲染foo组件，但是foo组件的默认子组件不会渲染</em>
         )
       </h3>
-      <router-link :to="{ name: 'foo' }">跳转到foo</router-link>
+      <router-link :to="{ path: 'foo' }">跳转到foo</router-link>
       <hr />
       <h3>命名路由router-link中的query会被丢弃</h3>
       <h5>并不会被丢弃，在跳转命名路由时，在normalizeLocation中如果是命名路由，则直接返回新的raw（并没有丢弃原来的属性，只是复制了params）</h5>

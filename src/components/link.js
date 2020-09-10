@@ -39,6 +39,8 @@ export default {
   render (h: Function) {
     const router = this.$router
     const current = this.$route
+    // 这里为什么要走router.resolve，为什么不像push那样直接去match得到Route
+    // => 是因为这里后面需要location和href
     const { location, route, href } = router.resolve(
       this.to,
       current,
@@ -64,6 +66,7 @@ export default {
         ? exactActiveClassFallback
         : this.exactActiveClass
 
+    // 这里因为如果是redirect，则需要跟redirect后的Route进行比较
     const compareTarget = route.redirectedFrom
       ? createRoute(null, normalizeLocation(route.redirectedFrom), null, router)
       : route
