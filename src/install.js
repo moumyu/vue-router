@@ -22,6 +22,10 @@ export function install (Vue) {
 
   Vue.mixin({
     beforeCreate () {
+      // 只有根组件才有$options.router，所以所有组件的_rooterRoot都是Vue根实例
+      // 在后面router-view渲染时，回去判断parent._rooterRoot和parent是否相等
+      // 来获取路由出口组件的深度，从而拿到对应的RouteRecord进行渲染
+      // TODO: 那么路由init和_route都只会执行一次，如何进行子路由的跳转与刷新
       if (isDef(this.$options.router)) {
         this._routerRoot = this
         this._router = this.$options.router
