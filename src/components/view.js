@@ -114,6 +114,7 @@ export default {
 
     const configProps = matched.props && matched.props[name]
     // save route and configProps in cachce
+    // 这里configProps拿到的就是RouteConfig的props属性
     if (configProps) {
       extend(cache[name], {
         route,
@@ -128,12 +129,14 @@ export default {
 
 function fillPropsinData (component, data, route, configProps) {
   // resolve props
+  // 根据route和configProps得到props
   let propsToPass = data.props = resolveProps(route, configProps)
   if (propsToPass) {
     // clone to prevent mutation
     propsToPass = data.props = extend({}, propsToPass)
     // pass non-declared props as attrs
     const attrs = data.attrs = data.attrs || {}
+    // 如果组件中props中没有接收这个参数则将其赋值到attrs中
     for (const key in propsToPass) {
       if (!component.props || !(key in component.props)) {
         attrs[key] = propsToPass[key]
@@ -143,6 +146,11 @@ function fillPropsinData (component, data, route, configProps) {
   }
 }
 
+// 根据config去得到props
+// 一般来说RouteConfig里面的props可能为boolean、object、function
+// 如果是boolean的情况，则为Route.params
+// 如果是object，则为此对象
+// 如果是function，则执行这个function得到一个对象
 function resolveProps (route, config) {
   switch (typeof config) {
     case 'undefined':
