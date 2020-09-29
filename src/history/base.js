@@ -198,6 +198,7 @@ export class History {
             (typeof to === 'object' &&
               (typeof to.path === 'string' || typeof to.name === 'string'))
           ) {
+            // 这种情况为中断当前导航
             // next('/') or next({ path: '/' }) -> redirect
             abort(createNavigationRedirectedError(current, route))
             if (typeof to === 'object' && to.replace) {
